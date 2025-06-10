@@ -1,0 +1,217 @@
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --text-color: #333;
+    --background-color: #f4f4f4;
+   --box-shadow:     0 2px 4px rgba(0, 0, 0, 0.1);
+    --font-family: 'Arial', sans-serif;
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: var(--font-family);
+   
+   align-items: center;
+    padding: 20px;
+    box-shadow: var(--box-shadow);
+    border-radius: 8px;
+    max-width: 800px;
+}
+header{
+    background-color: var(--primary-color);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px 8px 0 0;
+}
+h1{
+    margin-bottom: 10px;
+}
+nav {
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-around;
+}
+nav ul{
+    list-style: none;
+    padding: 0;
+}
+nav ul li {
+    display: inline;
+    margin: 0 10px;
+}
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+nav ul li a:hover{
+    text-decoration: underline;
+    box-shadow: var(--box-shadow);
+}
+.secondary{
+ 
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+.work{
+    background-color: var(--text-color);
+    color: var(--background-color);
+       justify-content: center;
+    text-align: center;
+    align-items: center;
+    padding: 20px;
+}
+.work h2 {
+    margin-bottom: 10px;
+}
+.work input{
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--primary-color);
+    border-radius: 4px;
+    margin-bottom: 10px;
+    outline: none;
+    box-shadow: var(--box-shadow);
+}
+.work input:focus {
+    border-color: var(--secondary-color);
+}
+.work button{
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--primary-color);
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.work button:hover {
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: var(--box-shadow);
+}
+.work .result {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: var(--secondary-color);
+    color: white;
+    border-radius: 4px;
+}
+.work .result p {
+    margin: 0;
+}
+.work .result p span {
+    font-weight: bold;
+}
+footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.9em;
+    color: var(--text-color);
+}
+footer a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+footer a:hover {
+    text-decoration: underline;
+}
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+               justify-content: center;
+    text-align: center;
+    align-items: center;
+    }
+    header {
+        padding: 15px;
+    }
+    nav ul li {
+        display: block;
+        margin: 5px 0;
+    }
+    .work input, .work button {
+        width: 100%;
+    }
+}
+@media (max-width: 400px) {
+    body{
+            justify-content: center;
+            text-align: center;
+            align-items: center;
+    }
+    nav {
+        display: none;
+    }
+    .work input{
+        width: 50%;
+        padding: 10px;
+    }
+    header {
+        font-size: 1.2em;
+
+    }
+    .work h2 {
+        font-size: 1.5em;
+    }
+    .work input, .work button {
+        padding: 8px;
+    }
+}
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+               justify-content: center;
+    text-align: center;
+    align-items: center;
+    }
+    header {
+        padding: 20px;
+    }
+    .work {
+        padding: 15px;
+    }
+    .work input, .work button {
+        padding: 12px;
+    }
+}
+@media (max-width: 1024px) {
+    body {
+        padding: 20px;
+               justify-content: center;
+    text-align: center;
+    align-items: center;
+    }
+    header {
+        padding: 25px;
+    }
+    .work {
+        padding: 20px;
+    }
+    .work input, .work button {
+        padding: 14px;
+    }
+}
+@media (max-width: 1200px) {
+    body {
+        padding: 25px;
+               justify-content: center;
+    text-align: center;
+    align-items: center;
+    }
+    header {
+        padding: 30px;
+    }
+    .work {
+        padding: 25px;
+    }
+    .work input, .work button {
+        padding: 16px;
+    }
+}
