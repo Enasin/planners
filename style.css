@@ -150,8 +150,11 @@ footer a:hover {
         display: none;
     }
     .work input{
-        width: 50%;
+        width: 80%;
         padding: 10px;
+    }
+    .work button{
+        padding:5px 10px;
     }
     header {
         font-size: 1.2em;
