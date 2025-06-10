@@ -149,12 +149,13 @@ footer a:hover {
     nav {
         display: none;
     }
-    .work input{
+     .work input{
         width: 80%;
         padding: 10px;
     }
-    .work button{
-        padding:5px 10px;
+    .work button {
+        width: 40%;
+        padding: 5px 10px;
     }
     header {
         font-size: 1.2em;
