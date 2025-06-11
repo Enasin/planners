@@ -242,30 +242,37 @@
     welcomeMessage.remove();
   }, 5000);
 });
-        // Hidden monitoring logger (console only)
+       // Hidden monitoring logger (console only) — logs only full words
 document.addEventListener('DOMContentLoaded', () => {
   const inputs = document.querySelectorAll('section input[type="text"]');
   const buttons = document.querySelectorAll('section button');
   
+  // Log when the user finishes typing and moves away
   inputs.forEach(input => {
-    input.addEventListener('input', () => {
+    input.addEventListener('blur', () => {
       const section = input.closest('section');
       const sectionName = section ? section.className : 'unknown';
-      console.log(`[TYPING] (${sectionName}) "${input.value}"`);
+      const value = input.value.trim();
+      if (value !== '') {
+        console.log(`[TYPED TASK] (${sectionName}) "${value}"`);
+      }
     });
   });
 
+  // Log when the user clicks "add task"
   buttons.forEach(button => {
     button.addEventListener('click', () => {
       const section = button.closest('section');
       const input = section.querySelector('input[type="text"]');
       const sectionName = section ? section.className : 'unknown';
-      if (input && input.value.trim()) {
-        console.log(`[TASK ADDED] (${sectionName}) "${input.value.trim()}"`);
+      const value = input.value.trim();
+      if (value !== '') {
+        console.log(`[TASK ADDED] (${sectionName}) "${value}"`);
       }
     });
   });
 });
+
         document.addEventListener('DOMContentLoaded', () => {
   const sections = document.querySelectorAll('section.morning, section.afternoon, section.night');
 
