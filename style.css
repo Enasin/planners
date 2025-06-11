@@ -162,7 +162,7 @@ footer a:hover {
             align-items: center;
     }
     nav {
-        display: block;
+        display: none;
     }
      .work input{
         width: 80%;
