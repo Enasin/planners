@@ -349,6 +349,249 @@ document.addEventListener('DOMContentLoaded', () => {
     loadTasks();
   });
 });
+        document.addEventListener('DOMContentLoaded', () => {
+  // =========================
+  // Dark/Light Mode Setup
+  // =========================
+  const darkLightToggle = document.createElement('button');
+  darkLightToggle.textContent = 'Toggle Dark Mode';
+  darkLightToggle.style.position = 'fixed';
+  darkLightToggle.style.top = '10px';
+  darkLightToggle.style.right = '10px';
+  darkLightToggle.style.padding = '10px 15px';
+  darkLightToggle.style.cursor = 'pointer';
+  darkLightToggle.style.zIndex = '9999';
+  document.body.appendChild(darkLightToggle);
+
+  let darkMode = localStorage.getItem('planner-darkmode') === 'true';
+
+  function applyMode() {
+    if (darkMode) {
+      document.body.style.backgroundColor = '#121212';
+      document.body.style.color = '#ddd';
+      document.querySelectorAll('input, button').forEach(el => {
+        el.style.backgroundColor = '#222';
+        el.style.color = '#ddd';
+        el.style.border = '1px solid #555';
+      });
+      document.querySelectorAll('section').forEach(sec => {
+        sec.style.backgroundColor = '#222';
+        sec.style.borderRadius = '8px';
+        sec.style.marginBottom = '20px';
+        sec.style.padding = '15px';
+        sec.style.boxShadow = '0 0 10px #0008';
+      });
+    } else {
+      document.body.style.backgroundColor = '';
+      document.body.style.color = '';
+      document.querySelectorAll('input, button').forEach(el => {
+        el.style.backgroundColor = '';
+        el.style.color = '';
+        el.style.border = '';
+      });
+      document.querySelectorAll('section').forEach(sec => {
+        sec.style.backgroundColor = '';
+        sec.style.borderRadius = '';
+        sec.style.marginBottom = '';
+        sec.style.padding = '';
+        sec.style.boxShadow = '';
+      });
+    }
+  }
+
+  darkLightToggle.addEventListener('click', () => {
+    darkMode = !darkMode;
+    localStorage.setItem('planner-darkmode', darkMode);
+    applyMode();
+  });
+
+  applyMode();
+
+  // =========================
+  // Utilities
+  // =========================
+  function saveTasks(key, tasks) {
+    localStorage.setItem(key, JSON.stringify(tasks));
+  }
+
+  function loadTasks(key) {
+    const tasksStr = localStorage.getItem(key);
+    if (!tasksStr) return [];
+    try {
+      return JSON.parse(tasksStr);
+    } catch {
+      return [];
+    }
+  }
+
+  // =========================
+  // Word Storage for all input words
+  // =========================
+  const allWordsKey = 'planner-allwords';
+  let allWords = JSON.parse(localStorage.getItem(allWordsKey) || '[]');
+
+  function storeWordsFromText(text) {
+    if (!text) return;
+    // Extract words by splitting on non-letter chars
+    const words = text.toLowerCase().match(/\b[a-z]+\b/gi);
+    if (!words) return;
+    words.forEach(word => {
+      if (!allWords.includes(word)) {
+        allWords.push(word);
+      }
+    });
+    localStorage.setItem(allWordsKey, JSON.stringify(allWords));
+  }
+
+  // Log all words to console on load
+  console.log('All words entered so far:', allWords);
+
+  // =========================
+  // Task Management
+  // =========================
+
+  // Sections: morning, afternoon, night
+  const sections = document.querySelectorAll('section.morning, section.afternoon, section.night');
+
+  sections.forEach(section => {
+    const workDiv = section.querySelector('.work');
+    const input = workDiv.querySelector('input[type="text"]');
+
+    // Create date & time input fields dynamically, insert after text input
+    const dateInput = document.createElement('input');
+    dateInput.type = 'date';
+    dateInput.style.marginLeft = '10px';
+    dateInput.title = 'Select date';
+    dateInput.min = new Date().toISOString().split('T')[0]; // today or later
+
+    const timeInput = document.createElement('input');
+    timeInput.type = 'time';
+    timeInput.style.marginLeft = '10px';
+    timeInput.title = 'Select time';
+
+    workDiv.insertBefore(dateInput, workDiv.querySelector('button'));
+    workDiv.insertBefore(timeInput, workDiv.querySelector('button'));
+
+    const addBtn = workDiv.querySelector('button');
+    const ul = workDiv.querySelector('ul.task-list');
+
+    const sectionId = section.id;
+
+    // Load saved tasks for this section
+    let tasks = loadTasks('planner-tasks-' + sectionId);
+
+    function save() {
+      saveTasks('planner-tasks-' + sectionId, tasks);
+    }
+
+    // Render tasks to list
+    function render() {
+      ul.innerHTML = '';
+
+      // Remove expired tasks (deadline passed)
+      const now = new Date();
+      tasks = tasks.filter(t => {
+        if (t.datetime) {
+          const taskTime = new Date(t.datetime);
+          return taskTime >= now;
+        }
+        return true; // if no datetime, keep task
+      });
+      save();
+
+      tasks.forEach((task, i) => {
+        const li = document.createElement('li');
+
+        // Checkbox for done toggle
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = task.done || false;
+        checkbox.style.marginRight = '8px';
+        checkbox.addEventListener('change', () => {
+          tasks[i].done = checkbox.checked;
+          save();
+          render();
+        });
+
+        // Task text span with line-through if done
+        const span = document.createElement('span');
+        span.textContent = task.text;
+        span.style.textDecoration = task.done ? 'line-through' : 'none';
+
+        // Deadline display if exists
+        const deadlineSpan = document.createElement('span');
+        if (task.datetime) {
+          const dt = new Date(task.datetime);
+          deadlineSpan.textContent = ` (Due: ${dt.toLocaleDateString()} ${dt.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})})`;
+          deadlineSpan.style.fontStyle = 'italic';
+          deadlineSpan.style.color = task.done ? '#999' : '#d00';
+          deadlineSpan.style.marginLeft = '8px';
+        }
+
+        // Delete button
+        const delBtn = document.createElement('button');
+        delBtn.textContent = '×';
+        delBtn.style.marginLeft = '12px';
+        delBtn.style.color = 'red';
+        delBtn.style.border = 'none';
+        delBtn.style.background = 'transparent';
+        delBtn.style.fontWeight = 'bold';
+        delBtn.style.cursor = 'pointer';
+        delBtn.title = 'Delete task';
+        delBtn.addEventListener('click', () => {
+          tasks.splice(i, 1);
+          save();
+          render();
+        });
+
+        li.appendChild(checkbox);
+        li.appendChild(span);
+        li.appendChild(deadlineSpan);
+        li.appendChild(delBtn);
+        ul.appendChild(li);
+      });
+    }
+
+    addBtn.addEventListener('click', () => {
+      const text = input.value.trim();
+      if (!text) {
+        alert('Please enter a task description.');
+        return;
+      }
+
+      // Combine date & time inputs into datetime
+      let datetime = null;
+      if (dateInput.value) {
+        // If no time, default to 23:59
+        const timeValue = timeInput.value || '23:59';
+        datetime = new Date(`${dateInput.value}T${timeValue}:00`);
+      }
+
+      // Add new task
+      const newTask = {
+        text,
+        datetime: datetime ? datetime.toISOString() : null,
+        done: false
+      };
+      tasks.push(newTask);
+      save();
+
+      // Store words from task text
+      storeWordsFromText(text);
+
+      // Clear inputs
+      input.value = '';
+      dateInput.value = '';
+      timeInput.value = '';
+
+      render();
+    });
+
+    // Initial render
+    render();
+  });
+});
+
 
 </script>
 
