@@ -1,615 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>myplanner</title>
-    <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>myplanner</title>
+  <link rel="stylesheet" href="style.css" />
+  
 </head>
 <body>
-    <header>
-        <h1>my planner</h1>
-        <nav>
-            <ul>
-                <li><a href="#morning">Morning</a></li>
-                <li><a href="#afternoon">Afternoon</a></li>
-                <li><a href="#night">Night</a></li>
-            </ul>
-        </nav>
-    </header>
+  <header>
+    <h1>my planner</h1>
+    <nav>
+      <ul>
+        <li><a href="#morning">Morning</a></li>
+        <li><a href="#afternoon">Afternoon</a></li>
+        <li><a href="#night">Night</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    <section class="morning" id="morning">
-        <div class="work">
-            <h2>morning</h2>
-            <input type="text" placeholder="enter your task here" />
-            <button type="button">add task</button>
-            <ul class="task-list"></ul>
-        </div>
-    </section>
+  <section class="morning" id="morning">
+    <div class="work">
+      <h2>morning</h2>
+      <input type="text" placeholder="enter your task here" />
+      <button type="button">add task</button>
+      <ul class="task-list"></ul>
+    </div>
+  </section>
 
-    <section class="afternoon" id="afternoon">
-        <div class="work">
-            <h2>afternoon</h2>
-            <input type="text" placeholder="enter your task here" />
-            <button type="button">add task</button>
-            <ul class="task-list"></ul>
-        </div>
-    </section>
+  <section class="afternoon" id="afternoon">
+    <div class="work">
+      <h2>afternoon</h2>
+      <input type="text" placeholder="enter your task here" />
+      <button type="button">add task</button>
+      <ul class="task-list"></ul>
+    </div>
+  </section>
 
-    <section class="night" id="night">
-        <div class="work">
-            <h2>night</h2>
-            <input type="text" placeholder="enter your task here" />
-            <button type="button">add task</button>
-            <ul class="task-list"></ul>
-        </div>
-    </section>
+  <section class="night" id="night">
+    <div class="work">
+      <h2>night</h2>
+      <input type="text" placeholder="enter your task here" />
+      <button type="button">add task</button>
+      <ul class="task-list"></ul>
+    </div>
+  </section>
 
-    <footer>
-        <p>© 2023 myplanner. All rights reserved.</p>
-        <p>Contact: <a href="mailto:your-email@example.com">your-email@example.com</a></p>
-    </footer>
+  <footer>
+    <p>© 2023 myplanner. All rights reserved.</p>
+    <p>Contact: <a href="mailto:your-email@example.com">your-email@example.com</a></p>
+  </footer>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const sections = document.querySelectorAll('section.morning, section.afternoon, section.night');
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Interaction logs (saved in memory and localStorage)
+      const interactionLogs = [];
 
-        sections.forEach(section => {
-          const time = section.className; // 'morning', 'afternoon', or 'night'
-          const input = section.querySelector('input[type="text"]');
-          const button = section.querySelector('button');
-          const taskList = section.querySelector('.task-list');
-
-          function loadTasks() {
-            const saved = localStorage.getItem(`tasks-${time}`);
-            const tasks = saved ? JSON.parse(saved) : [];
-
-            taskList.innerHTML = '';
-
-            tasks.forEach((task, index) => {
-              const li = document.createElement('li');
-              li.textContent = task;
-
-              const delBtn = document.createElement('button');
-              delBtn.textContent = '×';
-              delBtn.title = 'Delete task';
-              delBtn.style.marginLeft = '10px';
-              delBtn.style.cursor = 'pointer';
-              delBtn.style.background = 'transparent';
-              delBtn.style.border = 'none';
-              delBtn.style.color = '#c0392b';
-              delBtn.style.fontWeight = 'bold';
-              delBtn.style.fontSize = '1.2rem';
-
-              delBtn.addEventListener('click', () => {
-                tasks.splice(index, 1);
-                localStorage.setItem(`tasks-${time}`, JSON.stringify(tasks));
-                loadTasks();
-              });
-
-              li.appendChild(delBtn);
-              taskList.appendChild(li);
-            });
-          }
-
-          function addTask() {
-            const task = input.value.trim();
-            if (!task) {
-              alert('Please enter a task');
-              return;
-            }
-            const saved = localStorage.getItem(`tasks-${time}`);
-            const tasks = saved ? JSON.parse(saved) : [];
-
-            tasks.push(task);
-            localStorage.setItem(`tasks-${time}`, JSON.stringify(tasks));
-
-            input.value = '';
-            loadTasks();
-          }
-
-          button.addEventListener('click', addTask);
-
-          input.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-              addTask();
-            }
-          });
-
-          loadTasks();
-        });
-      });
-      
-  document.addEventListener('DOMContentLoaded', () => {
-    // Simple in-memory log array
-    const interactionLogs = [];
-
-    // Function to add log entry
-    function logEvent(eventType, details) {
-      const timestamp = new Date().toISOString();
-      const logEntry = { eventType, details, timestamp };
-      interactionLogs.push(logEntry);
-
-      // Save logs to localStorage (optional)
-      localStorage.setItem('planner-interaction-logs', JSON.stringify(interactionLogs));
-
-      // Print to console
-      console.log(`[LOG] ${timestamp} - ${eventType}:`, details);
-    }
-
-    logEvent('page_load', 'User visited the planner app.');
-
-    const sections = document.querySelectorAll('section.morning, section.afternoon, section.night');
-
-    sections.forEach(section => {
-      const time = section.className; // 'morning', 'afternoon', or 'night'
-      const input = section.querySelector('input[type="text"]');
-      const button = section.querySelector('button');
-      const taskList = section.querySelector('.task-list');
-
-      function loadTasks() {
-        const saved = localStorage.getItem(`tasks-${time}`);
-        const tasks = saved ? JSON.parse(saved) : [];
-
-        taskList.innerHTML = '';
-
-        tasks.forEach((task, index) => {
-          const li = document.createElement('li');
-          li.textContent = task;
-
-          const delBtn = document.createElement('button');
-          delBtn.textContent = '×';
-          delBtn.title = 'Delete task';
-          delBtn.style.marginLeft = '10px';
-          delBtn.style.cursor = 'pointer';
-          delBtn.style.background = 'transparent';
-          delBtn.style.border = 'none';
-          delBtn.style.color = '#c0392b';
-          delBtn.style.fontWeight = 'bold';
-          delBtn.style.fontSize = '1.2rem';
-
-          delBtn.addEventListener('click', () => {
-            tasks.splice(index, 1);
-            localStorage.setItem(`tasks-${time}`, JSON.stringify(tasks));
-            loadTasks();
-            logEvent('task_deleted', { timeOfDay: time, taskText: task });
-          });
-
-          li.appendChild(delBtn);
-          taskList.appendChild(li);
-        });
+      function logEvent(eventType, details) {
+        const timestamp = new Date().toISOString();
+        const logEntry = { eventType, details, timestamp };
+        interactionLogs.push(logEntry);
+        localStorage.setItem('planner-interaction-logs', JSON.stringify(interactionLogs));
+        console.log(`[LOG] ${timestamp} - ${eventType}:`, details);
       }
 
-      function addTask() {
-        const task = input.value.trim();
-        if (!task) {
-          alert('Please enter a task');
-          return;
-        }
-        const saved = localStorage.getItem(`tasks-${time}`);
-        const tasks = saved ? JSON.parse(saved) : [];
+      logEvent('page_load', 'User visited the planner app.');
 
-        tasks.push(task);
-        localStorage.setItem(`tasks-${time}`, JSON.stringify(tasks));
+      const sections = document.querySelectorAll('section.morning, section.afternoon, section.night');
 
-        input.value = '';
-        loadTasks();
-        logEvent('task_added', { timeOfDay: time, taskText: task });
-      }
+      sections.forEach(section => {
+        const time = section.className; // 'morning', 'afternoon', or 'night'
+        const input = section.querySelector('input[type="text"]');
+        const button = section.querySelector('button');
+        const taskList = section.querySelector('.task-list');
 
-      button.addEventListener('click', addTask);
+        // Load tasks, filter expired, display them
+        function loadTasks() {
+          const saved = localStorage.getItem(`tasks-${time}`);
+          let tasks = saved ? JSON.parse(saved) : [];
 
-      input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          addTask();
-        }
-      });
+          // Filter out expired tasks older than 24 hours
+          const now = Date.now();
+          tasks = tasks.filter(taskObj => now - taskObj.timestamp < 86400000);
 
-      loadTasks();
-    });
-  });
-  window.addEventListener('DOMContentLoaded', () => {
-  // Create welcome message container
-  const welcomeMessage = document.createElement('div');
-  welcomeMessage.textContent = "Welcome to your planner! Have a productive day!";
-
-  // Style it directly with JS
-  Object.assign(welcomeMessage.style, {
-    position: 'fixed',
-    top: '20px',
-    right: '20px',
-    backgroundColor: '#3498db',  // Your --primary-color
-    color: 'white',
-    padding: '15px 20px',
-    borderRadius: '8px',
-    boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-    fontFamily: "'Arial', sans-serif",
-    zIndex: 1000,
-    cursor: 'pointer',
-    userSelect: 'none',
-  });
-
-  // Add message to the body
-  document.body.appendChild(welcomeMessage);
-
-  // Remove message on click
-  welcomeMessage.addEventListener('click', () => {
-    welcomeMessage.remove();
-  });
-
-  // Or auto-remove after 5 seconds
-  setTimeout(() => {
-    welcomeMessage.remove();
-  }, 5000);
-});
-       // Hidden monitoring logger (console only) — logs only full words
-document.addEventListener('DOMContentLoaded', () => {
-  const inputs = document.querySelectorAll('section input[type="text"]');
-  const buttons = document.querySelectorAll('section button');
-  
-  // Log when the user finishes typing and moves away
-  inputs.forEach(input => {
-    input.addEventListener('blur', () => {
-      const section = input.closest('section');
-      const sectionName = section ? section.className : 'unknown';
-      const value = input.value.trim();
-      if (value !== '') {
-        console.log(`[TYPED TASK] (${sectionName}) "${value}"`);
-      }
-    });
-  });
-
-  // Log when the user clicks "add task"
-  buttons.forEach(button => {
-    button.addEventListener('click', () => {
-      const section = button.closest('section');
-      const input = section.querySelector('input[type="text"]');
-      const sectionName = section ? section.className : 'unknown';
-      const value = input.value.trim();
-      if (value !== '') {
-        console.log(`[TASK ADDED] (${sectionName}) "${value}"`);
-      }
-    });
-  });
-});
-
-        document.addEventListener('DOMContentLoaded', () => {
-  const sections = document.querySelectorAll('section.morning, section.afternoon, section.night');
-
-  sections.forEach(section => {
-    const time = section.className; // morning / afternoon / night
-    const input = section.querySelector('input[type="text"]');
-    const button = section.querySelector('button');
-    const taskList = section.querySelector('.task-list');
-
-    function loadTasks() {
-      const saved = localStorage.getItem(`tasks-${time}`);
-      let tasks = saved ? JSON.parse(saved) : [];
-
-      // Filter out expired tasks (older than 24h)
-      const now = Date.now();
-      tasks = tasks.filter(taskObj => now - taskObj.timestamp < 86400000); // 24 * 60 * 60 * 1000
-
-      // Save only non-expired tasks back
-      localStorage.setItem(`tasks-${time}`, JSON.stringify(tasks));
-
-      // Clear and display tasks
-      taskList.innerHTML = '';
-      tasks.forEach((taskObj, index) => {
-        const li = document.createElement('li');
-        li.textContent = taskObj.text;
-
-        const delBtn = document.createElement('button');
-        delBtn.textContent = '×';
-        delBtn.title = 'Delete task';
-        delBtn.style.marginLeft = '10px';
-        delBtn.style.cursor = 'pointer';
-        delBtn.style.background = 'transparent';
-        delBtn.style.border = 'none';
-        delBtn.style.color = '#c0392b';
-        delBtn.style.fontWeight = 'bold';
-        delBtn.style.fontSize = '1.2rem';
-
-        delBtn.addEventListener('click', () => {
-          tasks.splice(index, 1);
+          // Save filtered tasks back
           localStorage.setItem(`tasks-${time}`, JSON.stringify(tasks));
+
+          taskList.innerHTML = '';
+          tasks.forEach((taskObj, index) => {
+            const li = document.createElement('li');
+            li.textContent = taskObj.text;
+
+            const delBtn = document.createElement('button');
+            delBtn.textContent = '×';
+            delBtn.title = 'Delete task';
+
+            delBtn.addEventListener('click', () => {
+              tasks.splice(index, 1);
+              localStorage.setItem(`tasks-${time}`, JSON.stringify(tasks));
+              loadTasks();
+              logEvent('task_deleted', { timeOfDay: time, taskText: taskObj.text });
+            });
+
+            li.appendChild(delBtn);
+            taskList.appendChild(li);
+          });
+        }
+
+        function addTask() {
+          const task = input.value.trim();
+          if (!task) {
+            alert('Please enter a task');
+            return;
+          }
+
+          const saved = localStorage.getItem(`tasks-${time}`);
+          const tasks = saved ? JSON.parse(saved) : [];
+
+          tasks.push({ text: task, timestamp: Date.now() });
+          localStorage.setItem(`tasks-${time}`, JSON.stringify(tasks));
+
+          input.value = '';
           loadTasks();
-        });
-
-        li.appendChild(delBtn);
-        taskList.appendChild(li);
-      });
-    }
-
-    function addTask() {
-      const task = input.value.trim();
-      if (!task) {
-        alert('Please enter a task');
-        return;
-      }
-
-      const saved = localStorage.getItem(`tasks-${time}`);
-      const tasks = saved ? JSON.parse(saved) : [];
-
-      tasks.push({ text: task, timestamp: Date.now() });
-
-      localStorage.setItem(`tasks-${time}`, JSON.stringify(tasks));
-
-      input.value = '';
-      loadTasks();
-    }
-
-    button.addEventListener('click', addTask);
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        addTask();
-      }
-    });
-
-    loadTasks();
-  });
-});
-        document.addEventListener('DOMContentLoaded', () => {
-  // =========================
-  // Dark/Light Mode Setup
-  // =========================
-  const darkLightToggle = document.createElement('button');
-  darkLightToggle.textContent = 'Toggle Dark Mode';
-  darkLightToggle.style.position = 'fixed';
-  darkLightToggle.style.top = '10px';
-  darkLightToggle.style.right = '10px';
-  darkLightToggle.style.padding = '10px 15px';
-  darkLightToggle.style.cursor = 'pointer';
-  darkLightToggle.style.zIndex = '9999';
-  document.body.appendChild(darkLightToggle);
-
-  let darkMode = localStorage.getItem('planner-darkmode') === 'true';
-
-  function applyMode() {
-    if (darkMode) {
-      document.body.style.backgroundColor = '#121212';
-      document.body.style.color = '#ddd';
-      document.querySelectorAll('input, button').forEach(el => {
-        el.style.backgroundColor = '#222';
-        el.style.color = '#ddd';
-        el.style.border = '1px solid #555';
-      });
-      document.querySelectorAll('section').forEach(sec => {
-        sec.style.backgroundColor = '#222';
-        sec.style.borderRadius = '8px';
-        sec.style.marginBottom = '20px';
-        sec.style.padding = '15px';
-        sec.style.boxShadow = '0 0 10px #0008';
-      });
-    } else {
-      document.body.style.backgroundColor = '';
-      document.body.style.color = '';
-      document.querySelectorAll('input, button').forEach(el => {
-        el.style.backgroundColor = '';
-        el.style.color = '';
-        el.style.border = '';
-      });
-      document.querySelectorAll('section').forEach(sec => {
-        sec.style.backgroundColor = '';
-        sec.style.borderRadius = '';
-        sec.style.marginBottom = '';
-        sec.style.padding = '';
-        sec.style.boxShadow = '';
-      });
-    }
-  }
-
-  darkLightToggle.addEventListener('click', () => {
-    darkMode = !darkMode;
-    localStorage.setItem('planner-darkmode', darkMode);
-    applyMode();
-  });
-
-  applyMode();
-
-  // =========================
-  // Utilities
-  // =========================
-  function saveTasks(key, tasks) {
-    localStorage.setItem(key, JSON.stringify(tasks));
-  }
-
-  function loadTasks(key) {
-    const tasksStr = localStorage.getItem(key);
-    if (!tasksStr) return [];
-    try {
-      return JSON.parse(tasksStr);
-    } catch {
-      return [];
-    }
-  }
-
-  // =========================
-  // Word Storage for all input words
-  // =========================
-  const allWordsKey = 'planner-allwords';
-  let allWords = JSON.parse(localStorage.getItem(allWordsKey) || '[]');
-
-  function storeWordsFromText(text) {
-    if (!text) return;
-    // Extract words by splitting on non-letter chars
-    const words = text.toLowerCase().match(/\b[a-z]+\b/gi);
-    if (!words) return;
-    words.forEach(word => {
-      if (!allWords.includes(word)) {
-        allWords.push(word);
-      }
-    });
-    localStorage.setItem(allWordsKey, JSON.stringify(allWords));
-  }
-
-  // Log all words to console on load
-  console.log('All words entered so far:', allWords);
-
-  // =========================
-  // Task Management
-  // =========================
-
-  // Sections: morning, afternoon, night
-  const sections = document.querySelectorAll('section.morning, section.afternoon, section.night');
-
-  sections.forEach(section => {
-    const workDiv = section.querySelector('.work');
-    const input = workDiv.querySelector('input[type="text"]');
-
-    // Create date & time input fields dynamically, insert after text input
-    const dateInput = document.createElement('input');
-    dateInput.type = 'date';
-    dateInput.style.marginLeft = '10px';
-    dateInput.title = 'Select date';
-    dateInput.min = new Date().toISOString().split('T')[0]; // today or later
-
-    const timeInput = document.createElement('input');
-    timeInput.type = 'time';
-    timeInput.style.marginLeft = '10px';
-    timeInput.title = 'Select time';
-
-    workDiv.insertBefore(dateInput, workDiv.querySelector('button'));
-    workDiv.insertBefore(timeInput, workDiv.querySelector('button'));
-
-    const addBtn = workDiv.querySelector('button');
-    const ul = workDiv.querySelector('ul.task-list');
-
-    const sectionId = section.id;
-
-    // Load saved tasks for this section
-    let tasks = loadTasks('planner-tasks-' + sectionId);
-
-    function save() {
-      saveTasks('planner-tasks-' + sectionId, tasks);
-    }
-
-    // Render tasks to list
-    function render() {
-      ul.innerHTML = '';
-
-      // Remove expired tasks (deadline passed)
-      const now = new Date();
-      tasks = tasks.filter(t => {
-        if (t.datetime) {
-          const taskTime = new Date(t.datetime);
-          return taskTime >= now;
-        }
-        return true; // if no datetime, keep task
-      });
-      save();
-
-      tasks.forEach((task, i) => {
-        const li = document.createElement('li');
-
-        // Checkbox for done toggle
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.checked = task.done || false;
-        checkbox.style.marginRight = '8px';
-        checkbox.addEventListener('change', () => {
-          tasks[i].done = checkbox.checked;
-          save();
-          render();
-        });
-
-        // Task text span with line-through if done
-        const span = document.createElement('span');
-        span.textContent = task.text;
-        span.style.textDecoration = task.done ? 'line-through' : 'none';
-
-        // Deadline display if exists
-        const deadlineSpan = document.createElement('span');
-        if (task.datetime) {
-          const dt = new Date(task.datetime);
-          deadlineSpan.textContent = ` (Due: ${dt.toLocaleDateString()} ${dt.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})})`;
-          deadlineSpan.style.fontStyle = 'italic';
-          deadlineSpan.style.color = task.done ? '#999' : '#d00';
-          deadlineSpan.style.marginLeft = '8px';
+          logEvent('task_added', { timeOfDay: time, taskText: task });
         }
 
-        // Delete button
-        const delBtn = document.createElement('button');
-        delBtn.textContent = '×';
-        delBtn.style.marginLeft = '12px';
-        delBtn.style.color = 'red';
-        delBtn.style.border = 'none';
-        delBtn.style.background = 'transparent';
-        delBtn.style.fontWeight = 'bold';
-        delBtn.style.cursor = 'pointer';
-        delBtn.title = 'Delete task';
-        delBtn.addEventListener('click', () => {
-          tasks.splice(i, 1);
-          save();
-          render();
+        // Add task on button click or Enter key press
+        button.addEventListener('click', addTask);
+        input.addEventListener('keydown', e => {
+          if (e.key === 'Enter') {
+            addTask();
+          }
         });
 
-        li.appendChild(checkbox);
-        li.appendChild(span);
-        li.appendChild(deadlineSpan);
-        li.appendChild(delBtn);
-        ul.appendChild(li);
+        // Log typed task on input blur
+        input.addEventListener('blur', () => {
+          const value = input.value.trim();
+          if (value !== '') {
+            console.log(`[TYPED TASK] (${time}) "${value}"`);
+          }
+        });
+
+        // Log task addition on button click
+        button.addEventListener('click', () => {
+          const value = input.value.trim();
+          if (value !== '') {
+            console.log(`[TASK ADDED] (${time}) "${value}"`);
+          }
+        });
+
+        loadTasks();
       });
-    }
 
-    addBtn.addEventListener('click', () => {
-      const text = input.value.trim();
-      if (!text) {
-        alert('Please enter a task description.');
-        return;
-      }
+      // Welcome message
+      const welcomeMessage = document.createElement('div');
+      welcomeMessage.textContent = "Welcome to your planner! Have a productive day!";
+      Object.assign(welcomeMessage.style, {
+        position: 'fixed',
+        top: '20px',
+        right: '20px',
+        backgroundColor: '#3498db',
+        color: 'white',
+        padding: '15px 20px',
+        borderRadius: '8px',
+        boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+        fontFamily: "'Arial', sans-serif",
+        zIndex: 1000,
+        cursor: 'pointer',
+        userSelect: 'none',
+      });
+      document.body.appendChild(welcomeMessage);
+      welcomeMessage.addEventListener('click', () => welcomeMessage.remove());
+      setTimeout(() => welcomeMessage.remove(), 5000);
 
-      // Combine date & time inputs into datetime
-      let datetime = null;
-      if (dateInput.value) {
-        // If no time, default to 23:59
-        const timeValue = timeInput.value || '23:59';
-        datetime = new Date(`${dateInput.value}T${timeValue}:00`);
-      }
+      // Dark/Light mode toggle button
+      const darkLightToggle = document.createElement('button');
+      darkLightToggle.textContent = 'Toggle Dark Mode';
+      Object.assign(darkLightToggle.style, {
+        position: 'fixed',
+        top: '10px',
+        right: '10px',
+        padding: '10px 15px',
+        cursor: 'pointer',
+        zIndex: 9999,
+      });
+      document.body.appendChild(darkLightToggle);
 
-      // Add new task
-      const newTask = {
-        text,
-        datetime: datetime ? datetime.toISOString() : null,
-        done: false
-      };
-      tasks.push(newTask);
-      save();
+      let darkMode = localStorage.getItem('planner-darkmode') === 'true';
 
-      // Store words from task text
-      storeWordsFromText(text);
-
-      // Clear inputs
-      input.value = '';
-      dateInput.value = '';
-      timeInput.value = '';
-
-      render();
-    });
-
-    // Initial render
-    render();
-  });
-});
-        tasks = []
-
-while True:
-    task = input("Enter a task (or type 'exit' to quit): ").strip()
-    if task.lower() == 'exit':
-        break
-    if task == '':
-        continue  # skip empty input silently
-    tasks.append(task)
-    print(f'Task "{task}" added.')
-
-print("\nYour tasks:")
-for i, t in enumerate(tasks, 1):
-    print(f"{i}. {t}")
-
-
-
-</script>
-
-    
-</body>
-</html>
+      function applyMode() {
+        if (darkMode) {
+          document.body.style.backgroundColor = '#121212';
+          document.body.style.color = '#ddd';
+          document.querySelectorAll('input, button').forEach(el => {
+            el.style.backgroundColor = '#222';
+            el.style.color = '#ddd';
+            el.style.border = '1px solid #555';
+          });
+          document.querySelectorAll('section').forEach(sec => {
+            sec.style.backgroundColor = '#222';
+            sec.style.border
