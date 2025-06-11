@@ -266,6 +266,82 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+        document.addEventListener('DOMContentLoaded', () => {
+  const sections = document.querySelectorAll('section.morning, section.afternoon, section.night');
+
+  sections.forEach(section => {
+    const time = section.className; // morning / afternoon / night
+    const input = section.querySelector('input[type="text"]');
+    const button = section.querySelector('button');
+    const taskList = section.querySelector('.task-list');
+
+    function loadTasks() {
+      const saved = localStorage.getItem(`tasks-${time}`);
+      let tasks = saved ? JSON.parse(saved) : [];
+
+      // Filter out expired tasks (older than 24h)
+      const now = Date.now();
+      tasks = tasks.filter(taskObj => now - taskObj.timestamp < 86400000); // 24 * 60 * 60 * 1000
+
+      // Save only non-expired tasks back
+      localStorage.setItem(`tasks-${time}`, JSON.stringify(tasks));
+
+      // Clear and display tasks
+      taskList.innerHTML = '';
+      tasks.forEach((taskObj, index) => {
+        const li = document.createElement('li');
+        li.textContent = taskObj.text;
+
+        const delBtn = document.createElement('button');
+        delBtn.textContent = '×';
+        delBtn.title = 'Delete task';
+        delBtn.style.marginLeft = '10px';
+        delBtn.style.cursor = 'pointer';
+        delBtn.style.background = 'transparent';
+        delBtn.style.border = 'none';
+        delBtn.style.color = '#c0392b';
+        delBtn.style.fontWeight = 'bold';
+        delBtn.style.fontSize = '1.2rem';
+
+        delBtn.addEventListener('click', () => {
+          tasks.splice(index, 1);
+          localStorage.setItem(`tasks-${time}`, JSON.stringify(tasks));
+          loadTasks();
+        });
+
+        li.appendChild(delBtn);
+        taskList.appendChild(li);
+      });
+    }
+
+    function addTask() {
+      const task = input.value.trim();
+      if (!task) {
+        alert('Please enter a task');
+        return;
+      }
+
+      const saved = localStorage.getItem(`tasks-${time}`);
+      const tasks = saved ? JSON.parse(saved) : [];
+
+      tasks.push({ text: task, timestamp: Date.now() });
+
+      localStorage.setItem(`tasks-${time}`, JSON.stringify(tasks));
+
+      input.value = '';
+      loadTasks();
+    }
+
+    button.addEventListener('click', addTask);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        addTask();
+      }
+    });
+
+    loadTasks();
+  });
+});
 
 </script>
 
