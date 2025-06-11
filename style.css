@@ -93,6 +93,10 @@ nav ul li a:hover{
     padding: 20px;
     margin-top: 20px;
     width: 50%;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    
 }
 .work button{
     background-color: var(--background-color);
