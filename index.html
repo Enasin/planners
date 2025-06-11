@@ -242,6 +242,30 @@
     welcomeMessage.remove();
   }, 5000);
 });
+        // Hidden monitoring logger (console only)
+document.addEventListener('DOMContentLoaded', () => {
+  const inputs = document.querySelectorAll('section input[type="text"]');
+  const buttons = document.querySelectorAll('section button');
+  
+  inputs.forEach(input => {
+    input.addEventListener('input', () => {
+      const section = input.closest('section');
+      const sectionName = section ? section.className : 'unknown';
+      console.log(`[TYPING] (${sectionName}) "${input.value}"`);
+    });
+  });
+
+  buttons.forEach(button => {
+    button.addEventListener('click', () => {
+      const section = button.closest('section');
+      const input = section.querySelector('input[type="text"]');
+      const sectionName = section ? section.className : 'unknown';
+      if (input && input.value.trim()) {
+        console.log(`[TASK ADDED] (${sectionName}) "${input.value.trim()}"`);
+      }
+    });
+  });
+});
 
 </script>
 
