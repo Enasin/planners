@@ -591,6 +591,21 @@ document.addEventListener('DOMContentLoaded', () => {
     render();
   });
 });
+        tasks = []
+
+while True:
+    task = input("Enter a task (or type 'exit' to quit): ").strip()
+    if task.lower() == 'exit':
+        break
+    if task == '':
+        continue  # skip empty input silently
+    tasks.append(task)
+    print(f'Task "{task}" added.')
+
+print("\nYour tasks:")
+for i, t in enumerate(tasks, 1):
+    print(f"{i}. {t}")
+
 
 
 </script>
