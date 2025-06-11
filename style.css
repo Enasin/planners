@@ -83,6 +83,17 @@ nav ul li a:hover{
 .work input:focus {
     border-color: var(--secondary-color);
 }
+
+.work .task-list{
+    background-color: var(--text-color);
+    color: var(--background-color);
+    border: 1px solid var(--primary-color);
+    border-radius: 10px;
+    font-weight: 400;
+    padding: 20px;
+    margin-top: 20px;
+    width: 50%;
+}
 .work button{
     background-color: var(--background-color);
     color: var(--text-color);
